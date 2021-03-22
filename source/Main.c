@@ -125,7 +125,7 @@ static int parse_command_line(int argc, char* argv[], ApplicationContext* data) 
 
 static void print_usage() {
     g_print(
-        "Application to stream mixed video data to twitch.\n"
+        "Application to stream mixed video data to twitch\n"
         "Usage:\n  ./twitch-streamer [twitch_api_key] video_path_1 video_path_2 video_path_3\n"
         "Examples:\n  ./twitch-streamer live_111111111_aaaabbbcccddddeeeeffffggghhhhh ../data/sintel_trailer-480p.webm "
         "../data/big_buck_bunny_trailer-360p.mp4 ../data/the_daily_dweebs-720p.mp4\n"
@@ -196,7 +196,7 @@ static int create_pipeline_elements(ApplicationContext* data) {
 
     data->pipeline = gst_pipeline_new("twitch-pipeline");
     if (!data->pipeline) {
-        g_printerr("Error: failed to create pipeline.\n");
+        g_printerr("Error: failed to create pipeline\n");
         return 1;
     }
 
@@ -238,7 +238,7 @@ static int create_pipeline_elements(ApplicationContext* data) {
     if (getcwd(current_work_dir, sizeof(current_work_dir)) != NULL) {
         g_print("Current working dir: %s\n", current_work_dir);
     } else {
-        g_printerr("Error: getcwd() error");
+        g_printerr("Error: getcwd() error\n");
         return 1;
     }
 
@@ -286,7 +286,7 @@ static int add_elements_to_pipeline(ApplicationContext* data) {
 
     for (i = 0; i < MAX_SOURCES; ++i) {
         if (!gst_bin_add(GST_BIN(data->pipeline), data->source[i])) {
-            g_printerr("Error: failed to add data source %i.\n", i);
+            g_printerr("Error: failed to add data source %i\n", i);
             return 1;
         }
     }
@@ -295,7 +295,7 @@ static int add_elements_to_pipeline(ApplicationContext* data) {
         // Element for real audio sink is added below explicitly
         if (i != AUDIO_FROM_SOURCE_INDEX) {
             if (!gst_bin_add(GST_BIN(data->pipeline), data->audio_sink[i])) {
-                g_printerr("Error: failed to add audio sink %i.\n", i);
+                g_printerr("Error: failed to add audio sink %i\n", i);
                 return 1;
             }
         }
@@ -303,7 +303,7 @@ static int add_elements_to_pipeline(ApplicationContext* data) {
 
     for (i = 0; i < MAX_SOURCES; ++i) {
         if (!gst_bin_add(GST_BIN(data->pipeline), data->video_scale[i])) {
-            g_printerr("Error: failed to add video scale %i.\n", i);
+            g_printerr("Error: failed to add video scale %i\n", i);
             return 1;
         }
     }
@@ -345,7 +345,7 @@ static int setup_videomixer_layout(ApplicationContext* data) {
         snprintf(string_buf, sizeof(string_buf), "video_scale_%i", i);
         video_mixer_sink_pad[i] = gst_element_get_request_pad(data->videomixer, "sink_%u");
         if (!video_mixer_sink_pad[i]) {
-            g_printerr("Error: failed to get pad %i from video mixer.\n", i);
+            g_printerr("Error: failed to get pad %i from video mixer\n", i);
             result = 1;
             goto exit;
         }
@@ -390,7 +390,7 @@ static int link_pipeline_elements(ApplicationContext* data) {
     char string_buf[255];
 
     if (!gst_element_link_many(data->audio_convert, data->audio_resample, data->audio_tee, NULL)) {
-        g_printerr("Error: audio elements could not be linked.\n");
+        g_printerr("Error: audio elements could not be linked\n");
         result = 1;
         goto exit;
     }
@@ -402,7 +402,7 @@ static int link_pipeline_elements(ApplicationContext* data) {
              OUTPUT_VIDEO_HEIGHT / 2);
     video_scale_caps = gst_caps_from_string(string_buf);
     if (!video_scale_caps) {
-        g_printerr("Error: failed to create scale filter caps.\n");
+        g_printerr("Error: failed to create scale filter caps\n");
         result = 1;
         goto exit;
     }
@@ -411,7 +411,7 @@ static int link_pipeline_elements(ApplicationContext* data) {
         snprintf(string_buf, sizeof(string_buf), "sink_%i", i);
         if (!gst_element_link_pads_filtered(
                 data->video_scale[i], "src", data->videomixer, string_buf, video_scale_caps)) {
-            g_printerr("Error: failed to link video %i with rescale filter.\n", i);
+            g_printerr("Error: failed to link video %i with rescale filter\n", i);
             result = 1;
             goto exit;
         }
@@ -420,7 +420,7 @@ static int link_pipeline_elements(ApplicationContext* data) {
     gst_caps_unref(video_scale_caps);
 
     if (!gst_element_link_many(data->videomixer, data->video_tee, NULL)) {
-        g_printerr("Error: mixer output elements could not be linked.\n");
+        g_printerr("Error: mixer output elements could not be linked\n");
         result = 1;
         goto exit;
     }
@@ -455,26 +455,26 @@ static int link_pipeline_elements(ApplicationContext* data) {
         }
 
         if (!gst_element_link_many(data->stream_audio_queue, data->voaacenc, data->flv_mux, NULL)) {
-            g_printerr("Error: audio FLV elements could not be linked.\n");
+            g_printerr("Error: audio FLV elements could not be linked\n");
             result = 1;
             goto exit;
         }
 
         if (!gst_element_link_many(data->stream_video_queue, data->x264enc, data->flv_mux, data->rtmp_sink, NULL)) {
-            g_printerr("Error: video FLV elements could not be linked.\n");
+            g_printerr("Error: video FLV elements could not be linked\n");
             result = 1;
             goto exit;
         }
     }
 
     if (!gst_element_link_many(data->device_audio_queue, data->audio_device_sink, NULL)) {
-        g_printerr("Error: device audio elements could not be linked.\n");
+        g_printerr("Error: device audio elements could not be linked\n");
         result = 1;
         goto exit;
     }
 
     if (!gst_element_link_many(data->device_video_queue, data->video_device_sink, NULL)) {
-        g_printerr("Error: device video elements could not be linked.\n");
+        g_printerr("Error: device video elements could not be linked\n");
         result = 1;
         goto exit;
     }
@@ -547,7 +547,7 @@ static int run_pipeline(ApplicationContext* data) {
     // Start playing
     ret = gst_element_set_state(data->pipeline, GST_STATE_PLAYING);
     if (ret == GST_STATE_CHANGE_FAILURE) {
-        g_printerr("Error: unable to set the pipeline to the playing state.\n");
+        g_printerr("Error: unable to set the pipeline to the playing state\n");
         return 1;
     }
 
@@ -572,7 +572,7 @@ static int run_pipeline(ApplicationContext* data) {
                 terminate = TRUE;
                 break;
             case GST_MESSAGE_EOS:
-                g_print("End-Of-Stream reached.\n");
+                g_print("End-Of-Stream reached\n");
                 terminate = TRUE;
                 break;
             case GST_MESSAGE_STATE_CHANGED:
@@ -587,7 +587,7 @@ static int run_pipeline(ApplicationContext* data) {
                 break;
             default:
                 // We should not reach here
-                g_printerr("Error: unexpected message received.\n");
+                g_printerr("Error: unexpected message received\n");
                 break;
             }
             gst_message_unref(msg);
@@ -645,15 +645,15 @@ static void pad_added_handler(GstElement* src, GstPad* new_pad, ApplicationConte
     }
 
     if (!sink_pad) {
-        g_printerr("Error: failed to get sink pad in pad_added_handler");
+        g_printerr("Error: failed to get sink pad in pad_added_handler\n");
         goto exit;
     }
 
     ret = gst_pad_link(new_pad, sink_pad);
     if (GST_PAD_LINK_FAILED(ret)) {
-        g_print("Type is '%s' but link failed.\n", new_pad_type);
+        g_print("Type is '%s' but link failed\n", new_pad_type);
     } else {
-        g_print("Link succeeded (type '%s').\n", new_pad_type);
+        g_print("Link succeeded (type '%s')\n", new_pad_type);
     }
 
 exit:
