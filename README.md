@@ -38,14 +38,17 @@ $ ./build/twitch-streamer live_111111111_aaaabbbcccddddeeeeffffggghhhhh ./data/s
 ```bash
 $ ./build/twitch-streamer ./data/sintel_trailer-480p.webm ./data/big_buck_bunny_trailer-360p.mp4 ./data/the_daily_dweebs-720p.mp4
 ```
-Note: absolute paths are also supported.
 In both cases windows with mixed video stream will be created.
+
+> **_NOTE:_**  absolute paths are also supported.
+
+# Known limitations
 
 > :warning: Twitch stream does not start immediately. ~20 seconds is required to see it on [twitch.tv](https://twitch.tv/).
 
-> :warning: Only 3 output videos composition is supported. To change this, source code modifications will be required. Though it should not be very difficult.
-
-> :warning: Output video dimensions are hardcoded as constants in sources.
+- Only 3 output videos composition is supported. To change this, source code modifications will be required. Though it should not be very difficult.
+- Output video dimensions are hardcoded as constants in sources.
+- Audio is taken from the first video. This is also a constant in the code.
 
 # Showcase
 Windowed app:
