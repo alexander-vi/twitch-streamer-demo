@@ -43,6 +43,10 @@ In both cases windows with mixed video stream will be created.
 
 > :warning: Twitch stream does not start immediately. ~20 seconds is required to see it on [twitch.tv](https://twitch.tv/).
 
+> :warning: Only 3 output videos composition is supported. To change this, source code modifications will be required. Though it should not be very difficult.
+
+> :warning: Output video dimensions are hardcoded as constants in sources.
+
 # Showcase
 Windowed app:
 ![Windowed app](/doc/images/window_screenshot.png?raw=true "Windowed app")
