@@ -484,8 +484,8 @@ static int link_pipeline_elements(ApplicationContext* data) {
         g_signal_connect(data->source[i], "pad-added", G_CALLBACK(pad_added_handler), data);
     }
 
-    // Clean resources
 exit:
+    // Clean resources
     if (audio_tee_src_pad_1) {
         gst_object_unref(audio_tee_src_pad_1);
     }
@@ -557,7 +557,7 @@ static int run_pipeline(ApplicationContext* data) {
         msg = gst_bus_timed_pop_filtered(
             bus, GST_CLOCK_TIME_NONE, GST_MESSAGE_STATE_CHANGED | GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
 
-        /* Parse message */
+        // Parse message
         if (msg != NULL) {
             GError* err;
             gchar* debug_info;
@@ -576,7 +576,7 @@ static int run_pipeline(ApplicationContext* data) {
                 terminate = TRUE;
                 break;
             case GST_MESSAGE_STATE_CHANGED:
-                /* We are only interested in state-changed messages from the pipeline */
+                // We are only interested in state-changed messages from the pipeline
                 if (GST_MESSAGE_SRC(msg) == GST_OBJECT(data->pipeline)) {
                     GstState old_state, new_state, pending_state;
                     gst_message_parse_state_changed(msg, &old_state, &new_state, &pending_state);
@@ -586,7 +586,7 @@ static int run_pipeline(ApplicationContext* data) {
                 }
                 break;
             default:
-                /* We should not reach here */
+                // We should not reach here
                 g_printerr("Error: unexpected message received.\n");
                 break;
             }
