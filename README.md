@@ -1,6 +1,11 @@
 # Description
 This is pure C GStreamer-based demo application showing how to use videomixer element and optionally stream the output to Twitch.
 
+# Supported platforms
+- Linux
+
+With minor modifications source code should work on other platforms.
+
 # Build requirements
 - Any recent C compiler
 ```bash
@@ -17,7 +22,7 @@ $ sudo apt install cmake
 
 # Build
 ```bash
-$ mkdir build && cd build
+$ mkdir -p build && cd build
 $ cmake -DCMAKE_BUILD_TYPE=Release ..
 $ make
 $ cd ..
