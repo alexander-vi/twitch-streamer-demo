@@ -143,7 +143,7 @@ static void print_usage() {
 
 static int create_pipeline_elements(ApplicationContext* data) {
     int i;
-    char string_buf[PATH_MAX];
+    char string_buf[PATH_MAX + 1024];
 
     for (i = 0; i < MAX_SOURCES; ++i) {
         snprintf(string_buf, sizeof(string_buf), "source_%i", i);
